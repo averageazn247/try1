@@ -17,29 +17,36 @@ import javax.swing.*;
 import java.lang.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.Timer;
  // borrowed the core graphing hibarpanel from http://www.java-forums.org/java-2d/7987-how-draw-vertical-bar-graph-java.html
 // buttons and toggle and sorts are not copied
 public class draw implements Runnable {
-    HiBarPanel hiBarPanel1 = new HiBarPanel();
-    HiBarPanel hiBarPanel2 = new HiBarPanel();
+    static HiBarPanel hiBarPanel1 = new HiBarPanel();
+    static HiBarPanel hiBarPanel2 = new HiBarPanel();
     static HiBarPanel hiBarPanel3=new HiBarPanel();
     static HiBarPanel hiBarPanel4=new HiBarPanel();
     static HiBarPanel hiBarPanel5=new HiBarPanel();
     static HiBarPanel hiBarPanel6=new HiBarPanel();
     public static int[] unsorted1,unsorted2,unsorted3,unsorted4,unsorted5,unsorted6; 
-    Boolean run =false; 
+    static Boolean run =false; 
     Random seed = new Random();
-    int delay = 200;
+    static int delay = 200;
     static int length = 20;
      static JToggleButton jToggleButton1;
-     static JTextField jTextField1;
-     static JTextField jTextField2;
+     static JTextField lengthinput;
+     static JTextField delayinput;
      JTextField lengthtext;
+ 	static Timer timer  = new  Timer( delay, new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+      	if(run)  
+        	runsort() ;
+        }
+     });
     public void createbut(){
 	   // makes run buttions and place to put length
     	 jToggleButton1 = new javax.swing.JToggleButton();
-    	  jTextField1 = new javax.swing.JTextField();
-    	  jTextField2 = new javax.swing.JTextField();
+    	  lengthinput = new javax.swing.JTextField();
+    	  delayinput = new javax.swing.JTextField();
     	  lengthtext = new javax.swing.JTextField();
     	  
           jToggleButton1.setText("Run");
@@ -49,14 +56,14 @@ public class draw implements Runnable {
               }
           });
 
-          jTextField1.addActionListener(new java.awt.event.ActionListener() {
+          lengthinput.addActionListener(new java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  jTextField1ActionPerformed(evt);
+                  lengthinputActionPerformed(evt);
               }
           });
-          jTextField2.addActionListener(new java.awt.event.ActionListener() {
+          delayinput.addActionListener(new java.awt.event.ActionListener() {
               public void actionPerformed(java.awt.event.ActionEvent evt) {
-                  jTextField2ActionPerformed(evt);
+                  delayinputActionPerformed(evt);
               }
           });
     }
@@ -87,29 +94,7 @@ public class draw implements Runnable {
     
     
     public void run() {
-    	unsorted1=unsorted2=unsorted3=unsorted4=unsorted5=unsorted6= makerandom();
-    	//1-6 are the unsorted arrays that will be sorted by the methods
-    	
-        while(true) {
-        	System.out.print(run);
-        	if(run==true){
-        		System.out.printf("insert = %s%n", java.util.Arrays.toString(unsorted2));
-        			hiBarPanel1.setData(unsorted1);
-        			hiBarPanel1.bubblestep();
-        			
-        			hiBarPanel2.setData(unsorted2);
-        			hiBarPanel2.insertStep();
-        	
-        		
-	            try {
-	                Thread.sleep(delay);
-	                System.out.printf("in delay");
-	            } catch(InterruptedException e) {
-	                break;
-	            }
-	            System.out.printf("out delay");
-        	}
-        }
+ 
     }
     private int[] getData() {
         int[] data = new int[4];
@@ -139,7 +124,8 @@ public class draw implements Runnable {
     
     	JFrame mainframe= new JFrame();
     	mainframe.setTitle("Drawing Sorts");
-    	mainframe.setPreferredSize(new Dimension(630,900 ) );
+    	mainframe.setMinimumSize(new Dimension(630,800 ));
+    	mainframe.setPreferredSize(new Dimension(630,800 ) );
     	
     	
         JPanel f = new JPanel();
@@ -147,64 +133,80 @@ public class draw implements Runnable {
         mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JLabel title= new JLabel("Bubble Sorts"); 
         
+        System.out.println("Bubble time");
         f.add(title);
-         f.add(new draw().getContent(1));
+        draw myDraw = new draw();
+         f.add(myDraw.getContent(1));
         
-        f.setSize(400,400);
-        f.setLocation(20,200);
+       // f.setSize(400,400);
+      //  f.setLocation(20,200);
         
        
         
         f.setVisible(true);
-        f.add(jToggleButton1);
+      
         mainframe.setVisible(true);
         
-        jTextField1.setText("Input label");
+        lengthinput.setText("200");
         f.add(new JLabel("Input Length"));
-        f.add(jTextField1 );
-        jTextField2.setText("200");
+        f.add(lengthinput );
+        delayinput.setText("200");
         f.add(new JLabel("Input delay"));
-        f.add(jTextField2 );        
-        jToggleButton1.setText("Run"); 
+        f.add(delayinput );        
         
-
+        
+    f.add(jToggleButton1);
   
         //insert
-       
+            
+        System.out.println("Insertion");
         f.add( new JLabel("Insertion Sorts"));
-        f.add(new draw().getContent(2));
+         
+        f.add(myDraw.getContent(2));
         f.setSize(400,400);
-        
-     /* 
+         
         //shell
         JLabel titles= new JLabel("Shell Sorts");  
         f.add(titles);
-         f.add(new draw().getContent(3));
+        f.add(myDraw.getContent(3));
         f.setSize(400,400);
         
         //merge  
         f.add(new JLabel("Merge Sorts") );
-         f.add(new draw().getContent(4));
+        f.add(myDraw.getContent(4));
         f.setSize(400,400);
       
         
         //quick sort
         f.add(new JLabel("Quick Sorts") );
-        f.add(new draw().getContent(5));
+        f.add(myDraw.getContent(5));
        f.setSize(400,400);     
         
         
         //heap sort
        f.add(new JLabel("Heap Sorts") );
-       f.add(new draw().getContent(6));
+       f.add(myDraw.getContent(6));
       f.setSize(400,400);
         
+     
+      
+        jToggleButton1.setText("Run"); 
+        while(true)
+        {
+        	timer.start();
+
+        }
         
-        
-   */     
-        
-        mainframe.pack();
-        
+    }
+    private static void runsort()
+    {
+		System.out.printf("insert = %s%n", java.util.Arrays.toString(unsorted2));
+		hiBarPanel1.setData(unsorted1);
+		hiBarPanel1.bubblestep();
+		
+		hiBarPanel2.setData(unsorted2);
+		hiBarPanel2.insertStep();
+    	
     }
     public static int[] getdata(int type)
     {
@@ -223,38 +225,58 @@ public class draw implements Runnable {
     	 return null;
  	 
     }
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private static int[] makecopy(int[] temp)
+    {
+    	int[] temp2= new int[temp.length];
+    	for (int i=0 ; i<temp.length;i++){
+    		temp2[i]=temp[i];
+    	}
+    	return temp2;
+    }
+    private void lengthinputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lengthinputActionPerformed
         // TODO add your handling code here:
         try{
             //gets input length
-            length= Integer.parseInt(this.jTextField1.getText());
+            String temp =  this.lengthinput.getText();
+            if (temp.length()>0)
+            {
+            	System.out.println("tempt length is: " + temp.length());
+            	length=Integer.parseInt(temp);
             
-            this.lengthtext.setText(  String.valueOf(length) );
+            } 
             unsorted1=makerandom();//creates the vector containing the values and randomizes it
             //converts into arrary for faster handling
+        	unsorted2=makecopy(unsorted1);
+        	unsorted3=makecopy(unsorted1);
+        	unsorted4=makecopy(unsorted1);
+        	unsorted5=makecopy(unsorted1);
+        	unsorted6=makecopy(unsorted1);
             
             System.out.print(" Length is "+ length);
              
             
-            
+         
             
         }
         catch(Exception e){
-            System.out.print("Bad input Reenter valid input Ints only \n");
+            System.out.print("Bad input Reenter valid input Ints only 1 \n");
             return;
         }
+         
         
-        
-    }//GEN-LAST:event_jTextField1ActionPerformed
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_lengthinputActionPerformed
+    private void delayinputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lengthinputActionPerformed
         // TODO add your handling code here:
         try{
             //gets input length
-            delay= Integer.parseInt(this.jTextField2.getText());
+        	
+            String temp =  this.delayinput.getText();
+            if (temp!="")
+            {
+            	System.out.println(temp+"Temp");
+            	delay=Integer.parseInt(temp);
             
-        
-            
-            
+            }
             System.out.print(" delay is "+ delay);
              
             
@@ -264,7 +286,7 @@ public class draw implements Runnable {
         catch(Exception e){
            // JOptionPane.showMessageDialog(lengthtext, this,"Bad length input only enter integers  \n"
                   //  + "reenter int \n", 20);
-            System.out.print("Bad input Reenter valid input Ints only \n");
+            System.out.print("Bad input Reenter valid input Ints only  2 \n");
             return;
         }
         
@@ -276,10 +298,12 @@ public class draw implements Runnable {
         {
            run=true; 
            System.out.print("run on \n"); 
+           timer.start();
             
         }
         else{
             run=false;
+            timer.stop();
              System.out.print("run off \n");
             
         };
@@ -294,7 +318,7 @@ class HiBarPanel extends JPanel {
     final int PAD = 30;
    int[]  data;
    static int pos1=0,pos2=0;
-   
+   static int pos=1,hole=1, temp=data[pos] ;
    void fillbubble(){
 	   
 	   data= draw.getdata(1);
@@ -304,23 +328,26 @@ class HiBarPanel extends JPanel {
 	   data=draw.getdata(2);
    }
  void insertStep(){
-		int pos=1,hole=1,temp;
-		System.out.printf("data = %s%n", java.util.Arrays.toString(data));
+		int temp,temp2;
+		//System.out.printf("data = %s%n", java.util.Arrays.toString(data));
+		
 		Boolean inner=true,outter=false;
-		hole=pos;
-		temp = data[pos];
+		System.out.print("pos "+ pos + " hole "+ hole+ "\n");
+		
+		
 		if(hole>0 & temp<data[hole-1])
 		{
-			data[pos]=data[pos-1];
+			temp=data[hole-1];
+			
 			hole--;
 			
 		}
-		else
+		else if(temp>data[hole-1])
 		{
 			
-			data[hole]=temp;
+			//data[hole]=temp;
 			pos++;
-					
+			hole=pos;		
 			
 		}
 			
@@ -409,7 +436,7 @@ class HiBarPanel extends JPanel {
         g2.setPaint(Color.blue);
         g2.draw(path);
     }
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField lengthinput;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JTextField lenghtext;
     
