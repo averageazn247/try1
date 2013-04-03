@@ -94,7 +94,34 @@ public class draw implements Runnable {
     
     
     public void run() {
+<<<<<<< HEAD
  
+=======
+    	unsorted1=unsorted2=unsorted3=unsorted4=unsorted5=unsorted6= makerandom();
+    	//1-6 are the unsorted arrays that will be sorted by the methods
+    	
+        while(true) {
+        	System.out.print(run);
+        	if(run==true){
+        		System.out.printf("insert = %s%n", java.util.Arrays.toString(unsorted2));
+        			hiBarPanel1.setData(unsorted1);
+        			hiBarPanel1.bubblestep();
+        			
+        			hiBarPanel2.setData(unsorted2);
+        			hiBarPanel2.insertStep();
+        	
+        		/*
+	            try {
+	                Thread.sleep(delay);
+	                System.out.printf("in delay");
+	            } catch(InterruptedException e) {
+	                break;
+	            }
+	            */
+	            System.out.printf("out delay");
+        	}
+        }
+>>>>>>> k
     }
     private int[] getData() {
         int[] data = new int[4];
